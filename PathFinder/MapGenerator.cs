@@ -158,7 +158,7 @@ public class MapGenerator
         }
     }
 
-    private List<Point> GetNeighbours(int column, int row, string[,] maze, int offset = 2,
+    public List<Point> GetNeighbours(int column, int row, string[,] maze, int offset = 2, //changed to public
         bool checkWalls = false)
     {
         var result = new List<Point>();

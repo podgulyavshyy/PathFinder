@@ -1,4 +1,4 @@
-namespace PathFinder;
+ namespace PathFinder;
 
 public struct Point
 {

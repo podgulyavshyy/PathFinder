@@ -7,15 +7,15 @@ public class MapGeneratorOptions
 
     public int Height { get; set; }
 
-    public MapType Type { get; set; } = MapType.Maze; 
+    public MapType Type { get; set; } = MapType.Maze;
 
-    public float Noise { get; set; }
+    public float Noise { get; set; }  //new value, default = None
 
     public int Seed { get; set; } = -1;
-        
-    public bool AddTraffic { get; set; }
-        
-    public int TrafficSeed { get; set; }
+
+    public bool AddTraffic { get; set; } 
+
+    public int TrafficSeed { get; set; } 
 }
     
     

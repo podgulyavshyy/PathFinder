@@ -9,7 +9,7 @@ public class MapGeneratorOptions
 
     public MapType Type { get; set; } = MapType.Maze;
 
-    public float Noise { get; set; }  //new value, default = None
+    public float Noise { get; set; }  
 
     public int Seed { get; set; } = -1;
 

@@ -9,9 +9,9 @@ class Program
         {
             Height = 15,  //changed value, default = 35
             Width = 30,  //changed value, default = 90
-            Noise = .5f, //added new parametr
+            Noise = .5f, //added new parameter
             AddTraffic = true,
-            TrafficSeed = 1
+            TrafficSeed = 1234
 
         });
 

@@ -85,6 +85,7 @@ public class MapPrinter
                 {
                     
                     // Set the value to traffic number 
+                    //to make without traffic change to 1
                     var n = int.Parse(maze[neighbour.Column, neighbour.Row]); 
                     
                     

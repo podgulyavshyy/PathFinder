@@ -7,8 +7,9 @@ class Program
     {
         var generator = new MapGenerator(new MapGeneratorOptions()
         {
-            Height = 35,
-            Width = 90,
+            Height = 15, // 35
+            Width = 25, // 90
+            AddTraffic = true
         });
 
         string[,] map = generator.Generate();

@@ -9,7 +9,8 @@ class Program
         {
             Height = 15, // 35
             Width = 25, // 90
-            AddTraffic = true
+            AddTraffic = true,
+            //Noise = 0.9f
         });
 
         string[,] map = generator.Generate();

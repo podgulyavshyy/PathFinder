@@ -12,7 +12,7 @@ public class MapPrinter
         maze[B.Column, B.Row] = "B";
         
         var path = AStar(maze, A, B);
-        
+        // OldPrint(maze);
         for (var row = 0; row < maze.GetLength(1); row++)
         {
             Console.Write($"{row}\t");

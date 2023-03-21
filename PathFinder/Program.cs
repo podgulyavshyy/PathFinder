@@ -7,10 +7,10 @@ class Program
     {
         var generator = new MapGenerator(new MapGeneratorOptions()
         {
-            Height = 15, // 35
-            Width = 25, // 90
-            AddTraffic = true,
-            //Noise = 0.9f
+            Height = 20, // 35
+            Width = 35, // 90
+            AddTraffic = false,
+            Noise = 0.9f
         });
 
         string[,] map = generator.Generate();

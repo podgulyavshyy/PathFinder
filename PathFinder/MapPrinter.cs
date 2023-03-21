@@ -8,7 +8,7 @@ public class MapPrinter
     public void Print(string[,] maze)
     {
         Point A = new Point(0, 0);
-        Point B = new Point(5, 5);
+        Point B = new Point(20, 15);
         maze[B.Column, B.Row] = "B";
         
         var path = AStar(maze, A, B);
@@ -34,11 +34,12 @@ public class MapPrinter
 
     public List<Point> AStar(string[,] maze, Point A, Point B)
     {
-
         Point curr = A;
 
         List<Point> path = new List<Point>();
+        List<Point> open = new List<Point>();
         
+  
         
         while (true)
         {
@@ -50,8 +51,8 @@ public class MapPrinter
             {
 
                 path.Add(curr);
-                List<Point> noval = GetTilesAround(curr);
-                List<Point> val = CalcValue(noval, maze, A, B);
+                List<Point> noval = GetTilesAround(curr, maze); // maybe us GetNeighbors native func
+                List<Point> val = CalcValue(noval, maze, A, B); 
                 Stack<Point> noLast = new Stack<Point>();
                 int k = val.Count;
                 for (int j = 0; j < k; j++)
@@ -68,6 +69,25 @@ public class MapPrinter
                     }
                 }
 
+                foreach (var tile in val) //alt path
+                {
+                    open.Add(tile);
+                }
+                var lowestTest = open[0];
+                if (noLast.Count == 0)
+                {
+                   
+                    for (int i = 0; i < open.Count; i++)
+                    {
+                        if (open[i].Value < lowestTest.Value)
+                        {
+                            lowestTest = open[i];
+                        }
+                    }
+                    curr = lowestTest;
+                    open.Remove(lowestTest);
+                    continue;
+                }
                 var lowestValPoint = noLast.Peek();
                 for (int j = 0; j < noLast.Count; j++)
                 {
@@ -88,7 +108,7 @@ public class MapPrinter
         //Console.Write("");
     }
 
-    public List<Point> GetTilesAround(Point point)
+    public List<Point> GetTilesAround(Point point, string[,] maze)
     {
         int col = point.Column;
         int row = point.Row;
@@ -97,7 +117,12 @@ public class MapPrinter
         {
             if (i == 0)
             {
+                
                 int col1 = col + 1;
+                if (col1 >= maze.GetLength(0))
+                {
+                    col1--;
+                }
                 points.Add(new Point(col1, row));
             }
             else if (i == 1)
@@ -110,8 +135,13 @@ public class MapPrinter
                 points.Add(new Point(col1, row));
             }
             else if (i == 2)
-            {
+            {   
                 int row1 = row + 1;
+                if (row1 >= maze.GetLength(1))
+                {
+                    row1--;
+                }
+                
                 points.Add(new Point(col, row1));
             }
             else if (i == 3)
@@ -130,6 +160,7 @@ public class MapPrinter
 
     public List<Point> CalcValue(List<Point> points, string[,] maze, Point A, Point B)
     {
+
         List<Point> pointsVal = new List<Point>();
         List<Point> noWalls = new List<Point>();
         
@@ -148,18 +179,16 @@ public class MapPrinter
         int j = noWalls.Count;
         for (int i = 0; i < j; i++)
         {
-            var curr = noWalls[i];
-            int colValB = Math.Abs(curr.Column - B.Column);
-            int rowValB = Math.Abs(curr.Row - B.Row);
-            int colValA = Math.Abs(curr.Column - A.Column);
-            int rowValA = Math.Abs(curr.Row - A.Row);
-
-            int val = colValB + rowValB + rowValA + colValA; // + Int32.Parse(maze[curr.Column, curr.Row]);
-            curr.Value = val;
+            var curr = noWalls[i]; // 11 33 11
+            // int val = Math.Abs(B.Column - curr.Column) + Math.Abs(B.Row - curr.Row) + Math.Abs(A.Column - curr.Column) + Math.Abs(A.Row - curr.Row); // + Int32.Parse(maze[curr.Column, curr.Row]);
+            double val = Math.Abs(Math.Sqrt((B.Column - curr.Column) ^ 2 + (B.Row - curr.Row) ^ 2) + Math.Sqrt((A.Column - curr.Column)^2 + (A.Row - curr.Row)^2));
+            
+            curr.Value = (int)val;
             pointsVal.Add(curr);
         }
 
         return pointsVal;
+        
     }
 
     public void OldPrint(string[,] maze)

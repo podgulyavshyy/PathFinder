@@ -11,7 +11,7 @@ public class MapPrinter
     {
         //declaring Startpoint/EndPoint;
         Point startPoint = new Point(9, 0);
-        Point endPoint = new Point(5, 6);
+        Point endPoint = new Point(2, 6);
         
         
         //dictionaries 
@@ -112,8 +112,8 @@ public class MapPrinter
         void AStar(Point point)
         {
             //dictionaries
-            var aStarValues = new Dictionary<Point, int>();
-            var usedPoints = new Dictionary<Point, int>();
+            var aStarValues = new Dictionary<Point, double>();
+            var usedPoints = new Dictionary<Point, double>();
             
             //current point
             var next = point;
@@ -171,7 +171,7 @@ public class MapPrinter
                 while ((Math.Abs(pointA.Column - currentPoint.Column) + Math.Abs(pointA.Row - currentPoint.Row)) != 1)
                 {   
                     //dictionary to store neighbours of point (max 4 p)
-                    var neighboursDictionary = new Dictionary<Point, int>();
+                    var neighboursDictionary = new Dictionary<Point, double>();
 
                     //add to neighboursDictionary neighbour and it's value
                     foreach (var neighbour in GetNeighbours(currentPoint))
@@ -214,12 +214,12 @@ public class MapPrinter
 
             void AstarValue(Point point, int n)
             {
-                double valB = Double.Sqrt(Math.Abs(endPoint.Column - point.Column)^2 + Math.Abs(endPoint.Row - point.Row)^2);
-                double valA = Double.Sqrt(Math.Abs(startPoint.Column - point.Column)^2 + Math.Abs(startPoint.Row - point.Row)^2);
+                double valB = Math.Sqrt(Math.Pow(endPoint.Column - point.Column, 2) + Math.Pow(endPoint.Row - point.Row, 2));
+                double valA = Math.Sqrt(Math.Pow(startPoint.Column - point.Column, 2) + Math.Pow(startPoint.Row - point.Row, 2));
                 double valTotal = valA + valB;
                 
                 int val = Math.Abs(endPoint.Column - point.Column) + Math.Abs(endPoint.Row - point.Row) + Math.Abs(startPoint.Column - point.Column) + Math.Abs(startPoint.Row - point.Row);
-                aStarValues[point] = val;
+                aStarValues[point] = valTotal;
             } 
         }
         

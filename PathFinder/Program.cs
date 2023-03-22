@@ -9,7 +9,7 @@ class Program
         {
             Height = 15,  //changed value, default = 35
             Width = 30,  //changed value, default = 90
-            Noise = .8f, //added new parameter
+            Noise = .7f, //added new parameter
             Seed = 1,
             AddTraffic = false ,
             TrafficSeed = 1234

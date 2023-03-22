@@ -18,9 +18,13 @@ public class MapPrinter
         var distances = new Dictionary<Point, int>();
         var origins = new Dictionary<Point, Point>();
         
+        var time = 0;
+        var range = 1; // declare 1 cell distance
+        
         PrintTopLine();
         PaintBFS(startPoint);
         Printmaze();
+        System.Console.WriteLine(string.Format("\nThe time of traveling: {0}",time));
         
         
         void Printmaze()
@@ -182,6 +186,7 @@ public class MapPrinter
                 //stack to store final path
                 var path = new Stack<Point>();
                 
+                
                 path.Push(pointB); // endPoint
                 
                 var currentPoint = pointB;
@@ -199,9 +204,9 @@ public class MapPrinter
                     }
                     
                     var previousValue = neighboursDictionary.Values.Min();
-                    var previousPoint = neighboursDictionary.FirstOrDefault(x => x.Value == previousValue).Key; 
-                    
-                    
+                    var previousPoint = neighboursDictionary.FirstOrDefault(x => x.Value == previousValue).Key;
+
+                    time += previousValue;
                     //add point to final path stack
                     
                     path.Push(previousPoint);

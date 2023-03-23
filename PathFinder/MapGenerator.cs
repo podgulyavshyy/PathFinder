@@ -15,10 +15,17 @@ public class MapGenerator
 
     private string[,] maze;
 
+    public double seed;
+
+    public void SetSeed(double seed)
+    {
+        this.seed = seed;
+    }
+
     public MapGenerator(MapGeneratorOptions options)
     {
         this.options = options;
-        random = new Random((int)(options.Seed == -1 ? DateTime.UtcNow.Ticks : options.Seed));
+        random = new Random((int)(options.Seed == -1 ? DateTime.UtcNow.Ticks : this.seed));
     }
 
     public string[,] Generate()

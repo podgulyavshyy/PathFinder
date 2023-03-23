@@ -7,25 +7,52 @@ using System.Collections.Generic;
 
 public class MapPrinter
 {
-    public void Print(string[,] maze) //add new argument  List<Point> path
+    public int[] Print(string[,] maze) //add new argument  List<Point> path
     {
+        int[] metricsTop = new int[4];
         //declaring Startpoint/EndPoint;
-        Point startPoint = new Point(9, 0);
-        Point endPoint = new Point(4, 6);
+        Point startPoint = new Point(3, 0);
+        Point endPoint = new Point(9, 9);
         
+        while (maze[startPoint.Column, startPoint.Row] != " ")
+        {
+            startPoint.incrementRow();
+        }
         
+        while (maze[endPoint.Column, endPoint.Row] != " ")
+        {
+            endPoint.incrementRow();
+        }
+        
+
         //dictionaries 
         var distances = new Dictionary<Point, int>();
         var origins = new Dictionary<Point, Point>();
 
         var time = 0;
         var range = 1; // declare 1 cell distance
+
+        var efficiency = new Dictionary<int, int[]>();
+
+        int numOfTrials = 1;
         
-        PrintTopLine();
+
+        int[] bfs = PaintBFS(startPoint);
+        int[] astar = AStar(startPoint);
+        metricsTop[0] = bfs[0];
+        metricsTop[1] = bfs[1];
+        metricsTop[2] = astar[0];
+        metricsTop[3] = astar[1];
+            
+        //Console.WriteLine("test");
+        
+        
+        //PrintTopLine();
         //PaintBFS(startPoint);
-        AStar(startPoint);
-        Printmaze();
-        System.Console.WriteLine(string.Format("\nThe time of traveling: {0}",time));
+        //AStar(startPoint);
+        
+        //Printmaze();
+        //System.Console.WriteLine(string.Format("\nThe time of traveling: {0}",time));
         
         
         void Printmaze()
@@ -109,11 +136,15 @@ public class MapPrinter
             return neighbours;
         }
 
-        void AStar(Point point)
+        int[] AStar(Point point)
         {
             //dictionaries
             var aStarValues = new Dictionary<Point, double>();
             var usedPoints = new Dictionary<Point, double>();
+
+            int[] metrics = new int[2];
+            int countSteps = 0;
+            int countPath = 0;
             
             //current point
             var next = point;
@@ -147,12 +178,13 @@ public class MapPrinter
                     }
                 }
             }
-            FindPathA(endPoint, startPoint);
-            void FindPathA(Point pointB, Point pointA)
+            int[] test = new int[1];
+            test = FindPathA(endPoint, startPoint);
+            int[] FindPathA(Point pointB, Point pointA)
             {   
                 //stack to store final path
                 var path = new Stack<Point>();
-                
+                int[] test1 = new int[1];
                 
                 path.Push(pointB); // endPoint
                 
@@ -185,7 +217,12 @@ public class MapPrinter
                             usedPoints.Remove(neighbour);
                         }
                     }
-                    
+
+                    if (neighboursDictionary.Count == 0)
+                    {
+                        test1[0] = 0;
+                        return test1;
+                    }
                     var previousValue = neighboursDictionary.Values.Min();
                     var previousPoint = neighboursDictionary.FirstOrDefault(x => x.Value == previousValue).Key;
 
@@ -198,22 +235,30 @@ public class MapPrinter
                     currentPoint = previousPoint;
                     
                     //set the path into maze
-                    maze[previousPoint.Column, previousPoint.Row] = "#";
-                    
+                    //maze[previousPoint.Column, previousPoint.Row] = "#";
+
                 }
-                
+                // path here Astar
                 path.Push(pointA);
+
+                countPath = path.Count;
+                
+                
                 
                 
                 
                 //set the point into maze
-                maze[pointB.Column, pointB.Row] = "B";
-                maze[pointA.Column, pointA.Row] = "A";
+                //maze[pointB.Column, pointB.Row] = "B";
+                //maze[pointA.Column, pointA.Row] = "A";
+                test1[0] = 1;
+                return test1;
                 
             }
 
             void AstarValue(Point point, int n)
             {
+                //counter
+                countSteps++;
                 double valB = Math.Sqrt(Math.Pow(endPoint.Column - point.Column, 2) + Math.Pow(endPoint.Row - point.Row, 2));
                 double valA = Math.Sqrt(Math.Pow(startPoint.Column - point.Column, 2) + Math.Pow(startPoint.Row - point.Row, 2));
                 double valTotal = valA + valB;
@@ -221,10 +266,20 @@ public class MapPrinter
                 int val = Math.Abs(endPoint.Column - point.Column) + Math.Abs(endPoint.Row - point.Row) + Math.Abs(startPoint.Column - point.Column) + Math.Abs(startPoint.Row - point.Row);
                 aStarValues[point] = valTotal;
             } 
+            
+            metrics[0] = countSteps;
+            metrics[1] = countPath;
+            
+            return metrics;
         }
         
-        void PaintBFS(Point point)
+        int[] PaintBFS(Point point)
         {
+            //trials thing
+            int[] metricsBFS = new int[2];
+            int countSteps = 0;
+            int countPath = 0;
+            
             // declare
             var queue = new Queue<Point>();
             queue.Enqueue(point);
@@ -248,6 +303,8 @@ public class MapPrinter
                     //Check if that neighbour not in the Distances / compare values
                     if (!distances.ContainsKey(neighbour) || (distances[neighbour] > (distances[next] + n))) 
                     {
+                        //counter here
+                        countSteps++;
                         //if Decstra
                         Visit(neighbour, next, n);
                         queue.Enqueue(neighbour);
@@ -263,6 +320,10 @@ public class MapPrinter
             }
             else
             {
+                /*metricsBFS[0] = 0;
+                metricsBFS[1] = 0;
+                
+                return metricsBFS;*/
                 throw new Exception("No way from start point to end point");
             }
             
@@ -282,7 +343,7 @@ public class MapPrinter
                 if (!distances.ContainsKey(point))
                 {
                     distances.Add(point, nPrevious + n); // add point to dictionary Distances, setting the value 
-                                                      // to previous + it's value taken from traffic(n)
+                    // to previous + it's value taken from traffic(n)
                     
                     origins.Add(point, previousPoint); // add point to dictionary Origins, to find later previous element from selected
                 }
@@ -331,17 +392,25 @@ public class MapPrinter
                     currentPoint = previousPoint;
                     
                     //set the path into maze
-                    maze[previousPoint.Column, previousPoint.Row] = "#";
+                    //maze[previousPoint.Column, previousPoint.Row] = "#";
                     
                 }
-                
+                // path for diykstra
                 path.Push(pointA);
+                countPath = path.Count;
                 
                 //set the point into maze
-                maze[pointB.Column, pointB.Row] = "B";
-                maze[pointA.Column, pointA.Row] = "A";
+                //maze[pointB.Column, pointB.Row] = "B";
+                //maze[pointA.Column, pointA.Row] = "A";
                 
             }
+
+            metricsBFS[0] = countSteps;
+            metricsBFS[1] = countPath;
+            
+            return metricsBFS;
         }
+
+        return metricsTop;
     }
 }

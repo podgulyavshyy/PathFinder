@@ -11,7 +11,7 @@ public class MapPrinter
     {
         //declaring Startpoint/EndPoint;
         Point startPoint = new Point(9, 0);
-        Point endPoint = new Point(2, 6);
+        Point endPoint = new Point(4, 6);
         
         
         //dictionaries 
@@ -242,7 +242,7 @@ public class MapPrinter
                     
                     // Set the value to traffic number 
                     //to make without traffic change to 1
-                    var n = int.Parse(maze[neighbour.Column, neighbour.Row]);
+                    var n = 1; //int.Parse(maze[neighbour.Column, neighbour.Row]);
 
                     
                     //Check if that neighbour not in the Distances / compare values
